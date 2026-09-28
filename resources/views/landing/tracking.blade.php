@@ -4,27 +4,58 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto px-4 py-10">
+
+    {{-- Banner Notifikasi Khusus Tiket yang Baru Saja Dibuat --}}
+    @if(session('tiket_baru'))
+        <div class="mb-6 bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-6 shadow-sm">
+            <div class="flex items-start gap-4">
+                <div class="bg-emerald-500 text-white rounded-xl p-3 shrink-0">
+                    <i class="fa-solid fa-circle-check text-2xl"></i>
+                </div>
+                <div class="flex-1">
+                    <h2 class="text-base font-extrabold text-emerald-900 mb-1">
+                        Pengaduan Berhasil Terkirim!
+                    </h2>
+                    <p class="text-xs text-emerald-700 leading-relaxed">
+                        Laporan Anda telah tercatat dan sedang menunggu verifikasi petugas. <strong>Harap simpan atau catat ID Tiket berikut</strong> untuk memantau perkembangan penanganan kendala sewaktu-waktu.
+                    </p>
+
+                    {{-- Kotak Salin Tiket Cepat --}}
+                    <div class="mt-4 flex flex-wrap items-center gap-3">
+                        <div class="bg-white border-2 border-emerald-200 px-4 py-2 rounded-xl text-emerald-950 font-black tracking-widest text-lg select-all">
+                            {{ session('tiket_baru') }}
+                        </div>
+                        <button type="button" onclick="navigator.clipboard.writeText('{{ session('tiket_baru') }}'); this.innerText = 'Tersalin!'; setTimeout(() => this.innerText = 'Salin Kode', 2000)" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+                            <i class="fa-regular fa-copy"></i> Salin Kode
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    {{-- Form Pencarian Tiket Manual --}}
     <div class="bg-white p-6 rounded-xl border shadow-sm mb-6 text-center">
         <h1 class="text-2xl font-bold text-slate-800 mb-2">Pelacakan Tiket Aduan</h1>
-        <p class="text-xs text-slate-500 mb-6">Masukkan Kode Tiket yang Anda peroleh saat pertama kali mengirim aduan.</p>
+        <p class="text-xs text-slate-500 mb-6">Masukkan Kode Tiket yang Anda peroleh saat mengirim aduan untuk melihat perkembangan penanganan teknisi.</p>
 
         <form action="{{ route('pengaduan.tracking') }}" method="GET" class="max-w-md mx-auto flex gap-2">
             <input type="text" name="tiket" value="{{ $tiket ?? '' }}" placeholder="Contoh: TKT-20260928-ABC12" required class="flex-1 text-sm border rounded-lg px-4 py-2 border-slate-300 focus:ring-2 focus:ring-blue-500 uppercase tracking-wider font-semibold">
             <button type="submit" class="bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition">
-                Cari
+                Cari Tiket
             </button>
         </form>
     </div>
 
+    {{-- Hasil Pengecekan Tiket --}}
     @if($tiket && !$pengaduan)
         <div class="bg-amber-50 border border-amber-200 text-amber-800 p-6 rounded-xl text-center">
             <i class="fa-solid fa-triangle-exclamation text-2xl text-amber-600 mb-2"></i>
             <p class="font-bold">Kode Tiket "{{ $tiket }}" Tidak Ditemukan</p>
-            <p class="text-xs mt-1">Pastikan kode yang dimasukkan tepat dan belum pernah dibatalkan.</p>
+            <p class="text-xs mt-1">Pastikan kode yang dimasukkan sudah sesuai dan tidak ada kesalahan penulisan karakter.</p>
         </div>
     @elseif($pengaduan)
         <div class="bg-white rounded-xl border shadow-sm overflow-hidden mb-6">
-            <!-- Header Kartu -->
             <div class="bg-slate-50 p-5 border-b flex flex-wrap items-center justify-between gap-3">
                 <div>
                     <span class="text-xs font-bold text-slate-400 block uppercase">Nomor Tiket</span>
@@ -46,7 +77,6 @@
                 </div>
             </div>
 
-            <!-- Rincian Data -->
             <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <h3 class="font-bold text-slate-800 text-base mb-3">{{ $pengaduan->judul }}</h3>
@@ -64,7 +94,6 @@
                     </div>
                 </div>
 
-                <!-- Komparasi Foto -->
                 <div class="space-y-4">
                     <div>
                         <span class="text-xs font-bold text-slate-600 uppercase block mb-1">Foto Bukti Kerusakan Awal:</span>
@@ -81,11 +110,11 @@
                 </div>
             </div>
 
-            <!-- Timeline Tanggapan / Pengerjaan -->
+            {{-- Timeline Tanggapan / Pengerjaan Lapangan --}}
             <div class="border-t p-6 bg-slate-50">
                 <h4 class="font-bold text-slate-800 text-sm mb-4">Catatan Perkembangan & Tindak Lanjut Teknis</h4>
                 @if($pengaduan->tanggapan->isEmpty())
-                    <p class="text-xs text-slate-400 italic">Belum ada catatan tindak lanjut dari petugas verifikator.</p>
+                    <p class="text-xs text-slate-400 italic">Belum ada catatan tindak lanjut dari petugas teknis, Mohon Ditunggu.</p>
                 @else
                     <ol class="relative border-l border-blue-300 ml-3 space-y-4">
                         @foreach($pengaduan->tanggapan as $log)

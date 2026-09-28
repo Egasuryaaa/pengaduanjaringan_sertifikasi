@@ -15,8 +15,8 @@ class UserController extends Controller
         $users = User::query()
             ->when($request->query('q'), function ($q, $keyword) {
                 $q->where('name', 'like', "%{$keyword}%")
-                  ->orWhere('email', 'like', "%{$keyword}%")
-                  ->orWhere('instansi_opd', 'like', "%{$keyword}%");
+                    ->orWhere('email', 'like', "%{$keyword}%")
+                    ->orWhere('instansi_opd', 'like', "%{$keyword}%");
             })
             ->when($request->query('role'), function ($q, $role) {
                 $q->where('role', $role);
@@ -35,13 +35,14 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        // Pada method store:
         $validated = $request->validate([
-            'name'         => 'required|string|max:100',
-            'email'        => 'required|email|max:191|unique:users,email',
-            'no_hp'        => 'nullable|string|max:20',
+            'name' => 'required|string|max:100',
+            'email' => 'required|email|max:191|unique:users,email',
+            'no_hp' => 'nullable|string|max:20',
             'instansi_opd' => 'nullable|string|max:150',
-            'role'         => 'required|in:superadmin,admin,user',
-            'password'     => 'required|string|min:8|confirmed',
+            'role' => 'required|in:superadmin,admin',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -58,12 +59,12 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
-            'name'         => 'required|string|max:100',
-            'email'        => ['required', 'email', 'max:191', Rule::unique('users')->ignore($user->id)],
-            'no_hp'        => 'nullable|string|max:20',
+            'name' => 'required|string|max:100',
+            'email' => ['required', 'email', 'max:191', Rule::unique('users')->ignore($user->id)],
+            'no_hp' => 'nullable|string|max:20',
             'instansi_opd' => 'nullable|string|max:150',
-            'role'         => 'required|in:superadmin,admin,user',
-            'password'     => 'nullable|string|min:8|confirmed',
+            'role' => 'required|in:superadmin,admin',
+            'password' => 'nullable|string|min:8|confirmed',
         ]);
 
         if (!empty($validated['password'])) {

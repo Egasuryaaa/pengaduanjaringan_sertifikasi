@@ -7,16 +7,12 @@ use App\Models\KategoriPengaduan;
 use App\Models\Pengaduan;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // 1. Akun Superadmin
+        // 1. Akun Super Administrator
         $superadmin = User::create([
             'name'         => 'Super Administrator Kominfo',
             'email'        => 'superadmin@kominfo.go.id',
@@ -26,7 +22,7 @@ class DatabaseSeeder extends Seeder
             'role'         => 'superadmin',
         ]);
 
-        // 2. Akun Admin Verifikator Lapangan
+        // 2. Akun Admin Verifikator & Petugas Lapangan
         $admin = User::create([
             'name'         => 'Admin Teknis Jaringan',
             'email'        => 'admin@kominfo.go.id',
@@ -36,8 +32,7 @@ class DatabaseSeeder extends Seeder
             'role'         => 'admin',
         ]);
 
-
-        // 3. Data Master Kategori Layanan Kominfo
+        // 3. Kategori Layanan Kominfo
         $kategoriFO = KategoriPengaduan::create([
             'nama_kategori' => 'Jaringan Fiber Optik & Internet',
             'slug'          => 'jaringan-fiber-optik-internet',
@@ -50,18 +45,11 @@ class DatabaseSeeder extends Seeder
             'deskripsi'     => 'Layanan website pemda down, server database error, aplikasi tidak bisa diakses.',
         ]);
 
-        $kategoriBlankspot = KategoriPengaduan::create([
-            'nama_kategori' => 'Blankspot & Menara Telekomunikasi',
-            'slug'          => 'blankspot-menara',
-            'deskripsi'     => 'Laporan area tanpa sinyal seluler atau kerusakan fasilitas menara BTS.',
-        ]);
-
-        // 4. Contoh Aduan Awal
+        // 4. Dummy Pengaduan Awal
         Pengaduan::create([
             'kode_tiket'       => 'TKT-' . date('Ymd') . '-INIT1',
-            'user_id'          => $userOpd->id,
-            'nama_pelapor'     => 'Operator Kecamatan',
-            'kontak_pelapor'   => '081234567892',
+            'nama_pelapor'     => 'Budi Santoso',
+            'kontak_pelapor'   => '081298765432',
             'instansi_pelapor' => 'Kantor Kecamatan Wonosari',
             'kategori_id'      => $kategoriFO->id,
             'judul'            => 'Kabel Fiber Optik Terputus di Ruang Pelayanan',
