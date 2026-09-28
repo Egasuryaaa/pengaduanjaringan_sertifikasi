@@ -48,9 +48,9 @@ class PengaduanVerificationController extends Controller
     public function updateStatus(Request $request, Pengaduan $pengaduan)
     {
         $validated = $request->validate([
-            'status'             => 'required|in:diverifikasi,diproses,selesai,ditolak',
-            'prioritas'          => 'required|in:rendah,sedang,tinggi,darurat',
-            'catatan'            => 'required|string',
+            'status' => 'required|in:diverifikasi,diproses,selesai,ditolak',
+            'prioritas' => 'required|in:rendah,sedang,tinggi,darurat',
+            'catatan' => 'required|string',
             'foto_tindak_lanjut' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
@@ -64,19 +64,19 @@ class PengaduanVerificationController extends Controller
 
             // Update status tiket
             $pengaduan->update([
-                'status'     => $validated['status'],
-                'prioritas'  => $validated['prioritas'],
+                'status' => $validated['status'],
+                'prioritas' => $validated['prioritas'],
                 'petugas_id' => auth()->id(),
             ]);
 
             // Buat entri tanggapan & histori audit trail
             TanggapanPengaduan::create([
-                'pengaduan_id'       => $pengaduan->id,
-                'petugas_id'         => auth()->id(),
-                'catatan'            => $validated['catatan'],
+                'pengaduan_id' => $pengaduan->id,
+                'petugas_id' => auth()->id(),
+                'catatan' => $validated['catatan'],
                 'foto_tindak_lanjut' => $pathTindakLanjut,
-                'status_sebelumnya'  => $statusLama,
-                'status_sesudahnya'  => $validated['status'],
+                'status_sebelumnya' => $statusLama,
+                'status_sesudahnya' => $validated['status'],
             ]);
         });
 
