@@ -15,25 +15,17 @@
                 <i class="fa-solid fa-chart-pie w-4 text-center"></i> Ringkasan Sistem
             </a>
 
-            {{-- 1. Sidebar Untuk Semua User / OPD --}}
-            <div class="pt-4 pb-1 text-xs uppercase text-slate-500 font-semibold tracking-wider px-3">Layanan Aduan</div>
-            <a href="{{ route('user.pengaduan.riwayat') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg {{ request()->routeIs('user.pengaduan.riwayat') ? 'bg-blue-600 text-white' : 'hover:bg-slate-800 hover:text-white' }}">
-                <i class="fa-solid fa-clock-rotate-left w-4 text-center"></i> Aduan Saya
+            {{-- 1. Modul Penanganan Aduan (Admin & Superadmin) --}}
+            <div class="pt-4 pb-1 text-xs uppercase text-slate-500 font-semibold tracking-wider px-3">Layanan Pengaduan</div>
+            <a href="{{ route('admin.pengaduan.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg {{ request()->routeIs('admin.pengaduan.*') ? 'bg-blue-600 text-white' : 'hover:bg-slate-800 hover:text-white' }}">
+                <i class="fa-solid fa-list-check w-4 text-center"></i> Verifikasi & ACC Tiket
             </a>
 
-            {{-- 2. Sidebar Admin & Superadmin --}}
-            @if(auth()->check() && in_array(auth()->user()->role, ['admin', 'superadmin']))
-                <div class="pt-4 pb-1 text-xs uppercase text-slate-500 font-semibold tracking-wider px-3">Teknis Lapangan</div>
-                <a href="{{ route('admin.pengaduan.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg {{ request()->routeIs('admin.pengaduan.*') ? 'bg-blue-600 text-white' : 'hover:bg-slate-800 hover:text-white' }}">
-                    <i class="fa-solid fa-list-check w-4 text-center"></i> Verifikasi & ACC Tiket
-                </a>
-            @endif
-
-            {{-- 3. Sidebar Superadmin Saja --}}
+            {{-- 2. Modul Master Data (Superadmin Saja) --}}
             @if(auth()->check() && auth()->user()->role === 'superadmin')
                 <div class="pt-4 pb-1 text-xs uppercase text-slate-500 font-semibold tracking-wider px-3">Master Administrasi</div>
                 <a href="{{ route('superadmin.users.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg {{ request()->routeIs('superadmin.users.*') ? 'bg-blue-600 text-white' : 'hover:bg-slate-800 hover:text-white' }}">
-                    <i class="fa-solid fa-users w-4 text-center"></i> Kelola Pengguna
+                    <i class="fa-solid fa-users w-4 text-center"></i> Kelola Petugas
                 </a>
                 <a href="{{ route('superadmin.kategori.index') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg {{ request()->routeIs('superadmin.kategori.*') ? 'bg-blue-600 text-white' : 'hover:bg-slate-800 hover:text-white' }}">
                     <i class="fa-solid fa-folder-tree w-4 text-center"></i> Kategori Layanan
@@ -44,7 +36,7 @@
 
     <div class="p-4 border-t border-slate-800">
         <a href="{{ route('landing') }}" class="flex items-center gap-2 text-xs text-slate-400 hover:text-white">
-            <i class="fa-solid fa-arrow-left"></i> Kembali ke Halaman Publik
+            <i class="fa-solid fa-arrow-left"></i> Menuju Portal Publik
         </a>
     </div>
 </aside>

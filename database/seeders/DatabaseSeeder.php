@@ -36,17 +36,8 @@ class DatabaseSeeder extends Seeder
             'role'         => 'admin',
         ]);
 
-        // 3. Akun User / OPD
-        $userOpd = User::create([
-            'name'         => 'Operator Kecamatan',
-            'email'        => 'opd@kominfo.go.id',
-            'no_hp'        => '081234567892',
-            'instansi_opd' => 'Kantor Kecamatan Wonosari',
-            'password'     => Hash::make('password123'),
-            'role'         => 'user',
-        ]);
 
-        // 4. Data Master Kategori Layanan Kominfo
+        // 3. Data Master Kategori Layanan Kominfo
         $kategoriFO = KategoriPengaduan::create([
             'nama_kategori' => 'Jaringan Fiber Optik & Internet',
             'slug'          => 'jaringan-fiber-optik-internet',
@@ -65,7 +56,7 @@ class DatabaseSeeder extends Seeder
             'deskripsi'     => 'Laporan area tanpa sinyal seluler atau kerusakan fasilitas menara BTS.',
         ]);
 
-        // 5. Contoh Aduan Awal
+        // 4. Contoh Aduan Awal
         Pengaduan::create([
             'kode_tiket'       => 'TKT-' . date('Ymd') . '-INIT1',
             'user_id'          => $userOpd->id,
