@@ -12,7 +12,8 @@ class Pengaduan extends Model
 {
     use HasFactory;
 
-    protected $table = 'pengaduans';
+    // Arahkan ke tabel tunggal
+    protected $table = 'pengaduan';
 
     protected $fillable = [
         'kode_tiket',

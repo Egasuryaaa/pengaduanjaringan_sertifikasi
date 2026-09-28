@@ -10,7 +10,8 @@ class TanggapanPengaduan extends Model
 {
     use HasFactory;
 
-    protected $table = 'tanggapan_pengaduans';
+    // Arahkan ke tabel tunggal
+    protected $table = 'tanggapan_pengaduan';
 
     protected $fillable = [
         'pengaduan_id',
