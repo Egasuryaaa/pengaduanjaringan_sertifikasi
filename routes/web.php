@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-// Import Seluruh Controller Berdasarkan Namespace
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\User\PengaduanController as UserPengaduanController;
@@ -12,7 +10,7 @@ use App\Http\Controllers\Superadmin\KategoriController as SuperadminKategoriCont
 
 /*
 |--------------------------------------------------------------------------
-| 1. Jalur Publik (Landing Page, Form Aduan & Cek Tiket)
+| Jalur Publik (Landing, Form Aduan, Tracking Tiket ID Tanpa Login)
 |--------------------------------------------------------------------------
 */
 Route::get('/', [UserPengaduanController::class, 'index'])->name('landing');
@@ -21,7 +19,7 @@ Route::get('/tracking', [UserPengaduanController::class, 'tracking'])->name('pen
 
 /*
 |--------------------------------------------------------------------------
-| 2. Jalur Autentikasi (Tamu & Logout)
+| Jalur Autentikasi Pengguna & Petugas (Login & Logout)
 |--------------------------------------------------------------------------
 */
 Route::middleware('guest')->group(function () {
@@ -35,19 +33,19 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 
 /*
 |--------------------------------------------------------------------------
-| 3. Jalur Panel Internal (Wajib Login)
+| Jalur Panel Internal (Wajib Login)
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->prefix('panel')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Modul Riwayat Aduan Mandiri (Bisa diakses User OPD, Admin, & Superadmin)
+    // 1. Modul Riwayat Mandiri (User OPD / Petugas)
     Route::middleware(['role:user,admin,superadmin'])->prefix('saya')->name('user.')->group(function () {
         Route::get('/pengaduan', [UserPengaduanController::class, 'riwayat'])->name('pengaduan.riwayat');
         Route::delete('/pengaduan/{pengaduan}', [UserPengaduanController::class, 'destroy'])->name('pengaduan.destroy');
     });
 
-    // Modul Verifikasi & Penanganan Aduan (Admin & Superadmin)
+    // 2. Modul Admin & Superadmin (Verifikasi Tiket, ACC, Update Status, Upload Foto Tindak Lanjut)
     Route::middleware(['role:admin,superadmin'])->prefix('pengaduan')->name('admin.pengaduan.')->group(function () {
         Route::get('/', [PengaduanVerificationController::class, 'index'])->name('index');
         Route::get('/{pengaduan}', [PengaduanVerificationController::class, 'show'])->name('show');
@@ -55,7 +53,7 @@ Route::middleware(['auth'])->prefix('panel')->group(function () {
         Route::delete('/{pengaduan}', [PengaduanVerificationController::class, 'destroy'])->name('destroy');
     });
 
-    // Modul Administrasi Master (Superadmin Saja)
+    // 3. Modul Khusus Superadmin (Data Master Kategori & User)
     Route::middleware(['role:superadmin'])->prefix('master')->name('superadmin.')->group(function () {
         Route::resource('users', SuperadminUserController::class);
         Route::resource('kategori', SuperadminKategoriController::class)->except(['show']);

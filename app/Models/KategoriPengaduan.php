@@ -10,7 +10,7 @@ class KategoriPengaduan extends Model
 {
     use HasFactory;
 
-    protected $table = 'kategori_pengaduan';
+    protected $table = 'kategori_pengaduans';
 
     protected $fillable = [
         'nama_kategori',
@@ -18,7 +18,7 @@ class KategoriPengaduan extends Model
         'deskripsi',
     ];
 
-    public function pengaduan(): HasMany
+    public function pengaduans(): HasMany
     {
         return $this->hasMany(Pengaduan::class, 'kategori_id');
     }

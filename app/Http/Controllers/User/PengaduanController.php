@@ -29,7 +29,7 @@ class PengaduanController extends Controller
             'nama_pelapor'     => 'required|string|max:100',
             'kontak_pelapor'   => 'required|string|max:50',
             'instansi_pelapor' => 'nullable|string|max:150',
-            'kategori_id'      => 'required|exists:kategori_pengaduan,id',
+            'kategori_id'      => 'required|exists:kategori_pengaduans,id',
             'judul'            => 'required|string|max:150',
             'lokasi'           => 'required|string|max:255',
             'deskripsi'        => 'required|string',
